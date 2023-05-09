@@ -1,0 +1,12 @@
+management:
+  endpoints.web.exposure.include: '*'
+  metrics.distribution.percentiles-histogram.http.server.requests: true # (1)
+  tracing.sampling.probability: 1.0 # (2)
+
+server:
+  port: 8001
+
+spring:
+  application:
+    name: instrumentApp # TODO replace with your app name
+

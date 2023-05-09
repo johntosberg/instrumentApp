@@ -1,0 +1,55 @@
+metrics:
+  global:
+    scrape_interval: 60s
+    remote_write:
+      - url: <YOUR ENDPOINT HERE> # TODO
+        basic_auth:
+          username: <YOUR USERNAME HERE> # TODO
+          password: <YOUR KEY HERE> # TODO
+  configs:
+    - name: default
+      scrape_configs:
+        - job_name: instrumentApp # TODO: Name to your own app
+          static_configs:
+            - targets: ['localhost:8001']
+          scrape_interval: 10s # TODO: Set this way lower, no need to scrape this often
+          metrics_path: /actuator/prometheus # Default Spring Endpoint
+
+logs:
+  configs:
+    - name: instrumentApp # TODO
+      positions:
+        filename: /tmp/positions.yaml
+
+      clients:
+        - url: <YOUR ENDPOINT HERE> # TODO
+
+      scrape_configs:
+        - job_name: instrumentApp # TODO
+          static_configs:
+            - targets:
+                - localhost
+              labels:
+                __path__: /var/log/instrumentApp/*.log # TODO, replace with app name
+
+traces:
+  configs:
+    - name: default
+      remote_write:
+        - endpoint: <YOUR ENDPOINT HERE> # TODO
+          basic_auth:
+            username: <YOUR USERNAME HERE> # TODO
+            password: <YOUR KEY HERE> # TODO
+      receivers:
+        jaeger:
+          protocols:
+            grpc:
+            thrift_binary:
+            thrift_compact:
+            thrift_http:
+        zipkin:
+        otlp:
+          protocols:
+            http:
+            grpc:
+        opencensus:
